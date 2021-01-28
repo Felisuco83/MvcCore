@@ -15,9 +15,9 @@ namespace MvcCore.Repositories
 
         void EliminarDepartamento(int iddept);
 
-        void InsertarDepartamento(Departamento dept);
+        void InsertarDepartamento(Departamento dept, string imagen);
 
-        void ModificarDepartamento(Departamento dept);
+        void ModificarDepartamento(Departamento dept, string imagen);
 
     }
 }

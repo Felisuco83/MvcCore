@@ -29,17 +29,23 @@ namespace MvcCore
             String cadenasql = this.Configuration.GetConnectionString("cadenasqlhospitalcasa");
             string cadenaoracle = this.Configuration.GetConnectionString("cadenaoraclehospitalcasa");
             string cadenamysql = this.Configuration.GetConnectionString("cadenamysqlhospitalcasa");
-            services.AddTransient<PathProvider>();
+            string cadenaazure = this.Configuration.GetConnectionString("cadenaazurehospital");
+            services.AddSingleton<IConfiguration>(this.Configuration);
+            services.AddSingleton<PathProvider>();
+            services.AddSingleton<UploadService>();
+            services.AddSingleton<MailService>();
             services.AddTransient<RepositoryJoyerias>();
             services.AddTransient<RepositoryAlumnos>();
-            //services.AddDbContext<DepartamentosContext>(options => options.UseSqlServer(cadenasql));
+            services.AddTransient<RepositoryUsuarios>();
+            services.AddDbContext<HospitalContext>(options => options.UseSqlServer(cadenaazure));
             //services.AddTransient<IRepositoryDepartamentos>(z => new RepositoryDepartamentosOracle(cadenaoracle));
             //services.AddDbContext<DepartamentosContextMySQL>(options =>
             //options.UseMySQL(cadenamysql));
-            services.AddDbContextPool<DepartamentosContextMySQL>(options => options.UseMySql(cadenamysql, ServerVersion.AutoDetect(cadenamysql)) 
-            );
+            //services.AddDbContextPool<DepartamentosContextMySQL>(options => options.UseMySql(cadenamysql, ServerVersion.AutoDetect(cadenamysql)) 
+            //);
 
-            services.AddTransient<IRepositoryDepartamentos, RepositoryDepartamentosMySQL>();
+            services.AddTransient<IRepositoryDepartamentos, RepositoryDepartamentosSQL>();
+            services.AddTransient<IRepositoryHospital, RepositoryHospitalSql>();
             services.AddControllersWithViews();
         }
 

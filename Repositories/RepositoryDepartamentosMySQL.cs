@@ -38,12 +38,22 @@ namespace MvcCore.Repositories
             this.context.SaveChanges();
         }
 
+        public void InsertarDepartamento(Departamento dept, string imagen)
+        {
+            throw new NotImplementedException();
+        }
+
         public void ModificarDepartamento(Departamento dept)
         {
             Departamento depart = this.BuscarDepartamento(dept.Numero);
             depart.Nombre = dept.Nombre;
             depart.Localidad = dept.Localidad;
             this.context.SaveChanges();
+        }
+
+        public void ModificarDepartamento(Departamento dept, string imagen)
+        {
+            throw new NotImplementedException();
         }
     }
 }

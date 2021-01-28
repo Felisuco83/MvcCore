@@ -78,5 +78,15 @@ namespace MvcCore.Repositories
             element.Element("LOCALIDAD").Value = dept.Localidad;
             this.docxml.Save(this.path);
         }
+
+        public void InsertarDepartamento(Departamento dept, string imagen)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ModificarDepartamento(Departamento dept, string imagen)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

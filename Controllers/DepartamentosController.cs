@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MvcCore.Helpers;
 using MvcCore.Models;
 using MvcCore.Repositories;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,10 +13,12 @@ namespace MvcCore.Controllers
 {
     public class DepartamentosController : Controller
     {
-        private IRepositoryDepartamentos repo;
-        public DepartamentosController (IRepositoryDepartamentos repo)
+        private IRepositoryHospital repo;
+        PathProvider provider;
+        public DepartamentosController (IRepositoryHospital repo, PathProvider provider)
         {
             this.repo = repo;
+            this.provider = provider;
         }
         public IActionResult Index()
         {
@@ -33,9 +38,15 @@ namespace MvcCore.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Departamento dept)
+        public async Task<IActionResult> Create(Departamento dept, IFormFile ficheroimagen)
         {
-            this.repo.InsertarDepartamento(dept);
+            string filename = ficheroimagen.FileName;
+            string path = this.provider.MapPath(filename, Folders.Images);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await ficheroimagen.CopyToAsync(stream);
+            }
+            this.repo.InsertarDepartamento(dept,ficheroimagen.FileName);
             return RedirectToAction("Index");
         }
         public IActionResult Edit(int iddept)
@@ -43,10 +54,33 @@ namespace MvcCore.Controllers
             return View(this.repo.BuscarDepartamento(iddept));
         }
         [HttpPost]
-        public IActionResult Edit(Departamento dept)
+        public async Task<IActionResult> Edit(Departamento dept, IFormFile ficheroimagen)
         {
-            this.repo.ModificarDepartamento(dept);
+            string filename = ficheroimagen.FileName;
+            string path = this.provider.MapPath(filename, Folders.Images);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await ficheroimagen.CopyToAsync(stream);
+            }
+            this.repo.ModificarDepartamento(dept, ficheroimagen.FileName);
             return RedirectToAction("Index");
+        }
+
+        public IActionResult SeleccionMultiple ()
+        {
+            List<Departamento> departamentos = this.repo.GetDepartamentos();
+            List<Empleado> empleados = this.repo.GetEmpleados();
+            ViewData["DEPARTAMENTOS"] = departamentos;
+            return View(empleados);
+        }
+
+        [HttpPost]
+        public IActionResult SeleccionMultiple(List<int> iddepartamentos)
+        {
+            List<Departamento> departamentos = this.repo.GetDepartamentos();
+            List<Empleado> empleados = this.repo.BuscarEmpleadosDepartamentos(iddepartamentos);
+            ViewData["DEPARTAMENTOS"] = departamentos;
+            return View(empleados);
         }
     }
 }

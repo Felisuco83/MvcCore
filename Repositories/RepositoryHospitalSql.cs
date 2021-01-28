@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace MvcCore.Repositories
 {
-    public class RepositoryDepartamentosSQL: IRepositoryDepartamentos
+    public class RepositoryHospitalSql : IRepositoryHospital
     {
-        private HospitalContext context;
-        public RepositoryDepartamentosSQL(HospitalContext context)
+        HospitalContext context;
+        public RepositoryHospitalSql (HospitalContext context)
         {
             this.context = context;
         }
-
+        #region departamentos
         public Departamento BuscarDepartamento(int iddept)
         {
             return this.context.Departamentos.Where(x => x.Numero == iddept).FirstOrDefault();
@@ -35,6 +35,25 @@ namespace MvcCore.Repositories
             //return this.context.Departamentos.ToList();
         }
 
+        public void ModificarDepartamento(Departamento dept)
+        {
+            Departamento depart = this.BuscarDepartamento(dept.Numero);
+            depart.Nombre = dept.Nombre;
+            depart.Localidad = dept.Localidad;
+            this.context.SaveChanges();
+        }
+        #endregion
+        #region departamentos
+        public List<Empleado> GetEmpleados()
+        {
+            return this.context.Empleados.ToList();
+        }
+
+        public List<Empleado> BuscarEmpleadosDepartamentos(List<int> iddepartamentos)
+        {
+            return (from datos in this.context.Empleados where iddepartamentos.Contains(datos.Departamento) select datos).ToList();
+        }
+
         public void InsertarDepartamento(Departamento dept, string imagen)
         {
             dept.Imagen = imagen;
@@ -44,11 +63,8 @@ namespace MvcCore.Repositories
 
         public void ModificarDepartamento(Departamento dept, string imagen)
         {
-            Departamento depart = this.BuscarDepartamento(dept.Numero);
-            depart.Nombre = dept.Nombre;
-            depart.Localidad = dept.Localidad;
-            depart.Imagen = imagen;
-            this.context.SaveChanges();
+            throw new NotImplementedException();
         }
+        #endregion
     }
 }
