@@ -26,6 +26,13 @@ namespace MvcCore
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            #region session
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
+            });
+            #endregion
             String cadenasql = this.Configuration.GetConnectionString("cadenasqlhospitalcasa");
             string cadenaoracle = this.Configuration.GetConnectionString("cadenaoraclehospitalcasa");
             string cadenamysql = this.Configuration.GetConnectionString("cadenamysqlhospitalcasa");
@@ -60,6 +67,8 @@ namespace MvcCore
             app.UseRouting();
 
             app.UseStaticFiles();
+            //to use session functionality
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

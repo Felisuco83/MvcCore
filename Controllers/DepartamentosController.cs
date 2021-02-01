@@ -40,11 +40,14 @@ namespace MvcCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Departamento dept, IFormFile ficheroimagen)
         {
-            string filename = ficheroimagen.FileName;
-            string path = this.provider.MapPath(filename, Folders.Images);
-            using (var stream = new FileStream(path, FileMode.Create))
+            if(ficheroimagen != null)
             {
-                await ficheroimagen.CopyToAsync(stream);
+                string filename = ficheroimagen.FileName;
+                string path = this.provider.MapPath(filename, Folders.Images);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await ficheroimagen.CopyToAsync(stream);
+                }
             }
             this.repo.InsertarDepartamento(dept,ficheroimagen.FileName);
             return RedirectToAction("Index");
@@ -56,11 +59,14 @@ namespace MvcCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Departamento dept, IFormFile ficheroimagen)
         {
-            string filename = ficheroimagen.FileName;
-            string path = this.provider.MapPath(filename, Folders.Images);
-            using (var stream = new FileStream(path, FileMode.Create))
+            if (ficheroimagen != null)
             {
-                await ficheroimagen.CopyToAsync(stream);
+                string filename = ficheroimagen.FileName;
+                string path = this.provider.MapPath(filename, Folders.Images);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await ficheroimagen.CopyToAsync(stream);
+                }
             }
             this.repo.ModificarDepartamento(dept, ficheroimagen.FileName);
             return RedirectToAction("Index");

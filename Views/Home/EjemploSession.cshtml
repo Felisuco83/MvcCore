@@ -1,0 +1,19 @@
+﻿<h1> Ejemplo Session</h1>
+
+<h2 style="color:red">@ViewBag.Mensaje</h2>
+
+<ul class="list-group list-group-horizontal">
+    <li class="list-group-item">
+        <a asp-action="EjemploSession" asp-controller="Home" asp-route-accion="almacenar">Almacenar Session</a>
+    </li>
+    <li class="list-group-item">
+        <a asp-action="EjemploSession" asp-controller="Home" asp-route-accion="mostrar">Mostrar Session</a>
+    </li>
+</ul>
+
+<h2 style="color:blue;">
+    Autor: @ViewBag.Autor
+</h2>
+<h2 style="color:blue;">
+    Hora: @ViewBag.Hora
+</h2>
