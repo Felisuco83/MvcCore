@@ -1,4 +1,5 @@
-﻿using MvcCore.Data;
+﻿using Microsoft.Extensions.Caching.Memory;
+using MvcCore.Data;
 using MvcCore.Models;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,11 @@ namespace MvcCore.Repositories
     public class RepositoryHospitalSql : IRepositoryHospital
     {
         HospitalContext context;
-        public RepositoryHospitalSql (HospitalContext context)
+        IMemoryCache Cache;
+        public RepositoryHospitalSql (HospitalContext context, IMemoryCache cache)
         {
             this.context = context;
+            this.Cache = cache;
         }
         #region departamentos
         public Departamento BuscarDepartamento(int iddept)
@@ -29,10 +32,18 @@ namespace MvcCore.Repositories
 
         public List<Departamento> GetDepartamentos()
         {
-            var consulta = from datos in this.context.Departamentos select datos;
-            return consulta.ToList();
-            //CON ESTO VALDRIA
-            //return this.context.Departamentos.ToList();
+            List<Departamento> lista;
+            if (this.Cache.Get("DEPARTAMENTOS") == null)
+            {
+                var consulta = from datos in this.context.Departamentos select datos;
+                lista = consulta.ToList();
+                this.Cache.Set("DEPARTAMENTOS", lista);
+            }
+            else
+            {
+                lista = this.Cache.Get("DEPARTAMENTOS") as List<Departamento>;
+            }
+            return lista;
         }
 
         public void ModificarDepartamento(Departamento dept)

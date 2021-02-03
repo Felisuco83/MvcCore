@@ -28,6 +28,8 @@ namespace MvcCore
         {
             #region session
             services.AddDistributedMemoryCache();
+            services.AddDistributedMemoryCache();
+            services.AddMemoryCache();
             services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(15);
@@ -67,6 +69,7 @@ namespace MvcCore
             app.UseRouting();
 
             app.UseStaticFiles();
+            app.UseResponseCaching();
             //to use session functionality
             app.UseSession();
             app.UseEndpoints(endpoints =>
