@@ -10,5 +10,6 @@ namespace MvcCore.Repositories
     {
         List<Empleado> GetEmpleados();
         List<Empleado> BuscarEmpleadosDepartamentos(List<int> iddepartamentos);
+        List<Empleado> GetEmpleadosSession(List<int> idEmpleados);
     }
 }

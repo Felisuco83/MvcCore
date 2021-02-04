@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Caching.Memory;
 using MvcCore.Data;
 using MvcCore.Models;
 using System;
@@ -75,6 +76,12 @@ namespace MvcCore.Repositories
         public void ModificarDepartamento(Departamento dept, string imagen)
         {
             throw new NotImplementedException();
+        }
+
+        public List<Empleado> GetEmpleadosSession(List<int> idEmpleados)
+        {
+            var consulta = this.context.Empleados.Where(x => idEmpleados.Contains(x.IdEmpleado));
+            return consulta.ToList();
         }
         #endregion
     }
