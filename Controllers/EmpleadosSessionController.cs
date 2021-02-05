@@ -84,16 +84,18 @@ namespace MvcCore.Controllers
                 HttpContext.Session.GetObject<List<int>>("EMPLEADOS");
             List<Empleado> empleados =
                 this.repo.GetEmpleadosSession(sessionemp);
-            TempData["EMPLEADOS"] = HelperToolkit.SerializeJsonObject(empleados);
-            TempData["CANTIDADES"] = HelperToolkit.SerializeJsonObject(cantidades);
+            TempData.SetObject("EMPLEADOS",empleados);
+            TempData.SetObject("CANTIDADES", cantidades);
             return RedirectToAction("Pedidos");
         }
 
         public IActionResult Pedidos()
         {
             //return View();
-            ViewData["CANTIDADES"] = HelperToolkit.DeSerializeJsonObject<List<int>>(TempData["CANTIDADES"].ToString());
-            return View(HelperToolkit.DeSerializeJsonObject<List<Empleado>>(TempData["EMPLEADOS"].ToString()));
+            List<int> cantidades = TempData.GetObject<List<int>>("CANTIDADES");
+            List<Empleado> empleados = TempData.GetObject<List<Empleado>>("EMPLEADOS");
+            ViewData["CANTIDADES"] = cantidades;
+            return View(empleados);
         }
 
         //[HttpPost]
