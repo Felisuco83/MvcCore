@@ -84,20 +84,30 @@ namespace MvcCore.Controllers
                 HttpContext.Session.GetObject<List<int>>("EMPLEADOS");
             List<Empleado> empleados =
                 this.repo.GetEmpleadosSession(sessionemp);
-            TempData.SetObject("EMPLEADOS",empleados);
-            TempData.SetObject("CANTIDADES", cantidades);
+            //TempData.SetObject("EMPLEADOS",empleados);
+            HttpContext.Session.SetObject("EMPLEADOSLIST", empleados);
+            HttpContext.Session.SetObject("CANTIDADES", cantidades);
+            //TempData.SetObject("CANTIDADES", cantidades);
             return RedirectToAction("Pedidos");
         }
 
         public IActionResult Pedidos()
         {
             //return View();
-            List<int> cantidades = TempData.GetObject<List<int>>("CANTIDADES");
-            List<Empleado> empleados = TempData.GetObject<List<Empleado>>("EMPLEADOS");
+            //List<int> cantidades = TempData.GetObject<List<int>>("CANTIDADES");
+            //List<Empleado> empleados = TempData.GetObject<List<Empleado>>("EMPLEADOS");
+            List<int> cantidades = HttpContext.Session.GetObject<List<int>>("CANTIDADES");
+            List<Empleado> empleados = HttpContext.Session.GetObject<List<Empleado>>("EMPLEADOSLIST");
             ViewData["CANTIDADES"] = cantidades;
             return View(empleados);
         }
 
+        public IActionResult EmptyCart()
+        {
+            HttpContext.Session.Remove("EMPLEADOSLIST");
+            HttpContext.Session.Remove("CANTIDADES");
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
         //[HttpPost]
         //public IActionResult Pedidos(List<int> cantidades)
         //{

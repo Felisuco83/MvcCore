@@ -1,0 +1,19 @@
+﻿@{
+    List<int> cantidades = Context.Session.GetObject<List<int>>("CANTIDADES");
+    int numEmpCesta = 0;
+
+    if (Context.Session.GetObject<List<Empleado>>("EMPLEADOSLIST") != null)
+    {
+        foreach (int quant in cantidades)
+        {
+            numEmpCesta += quant;
+        }
+    }
+}
+
+<h3> Numero de empleados en la cesta : @numEmpCesta </h3>
+@if(numEmpCesta > 0 )
+{
+    <a asp-controller="EmpleadosSession" asp-action="EmptyCart">Vaciar Carrito</a>
+}
+
